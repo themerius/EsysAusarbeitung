@@ -1,0 +1,113 @@
+%
+% Esys Ausarbeitung
+% Marc Bumiller
+% Sven Hodapp
+%
+
+
+% -----------
+% 1. Präambel
+% -----------
+
+
+% Allgemeine Einstellungen
+% ------------------------
+\documentclass[
+	pdftex,%              PDFTex verwenden da wir ausschliesslich ein PDF erzeugen.
+	a4paper,%             Wir verwenden A4 Papier.
+	oneside,%             Einseitiger Druck.
+	12pt,%                Grosse Schrift, besser geeignet für A4.
+	halfparskip,%         Halbe Zeile Abstand zwischen Absätzen.
+	%chapterprefix,%       Kapitel mit 'Kapitel' anschreiben.
+	headsepline,%         Linie nach Kopfzeile.
+	footsepline,%         Linie vor Fusszeile.
+	bibtotocnumbered,%    Literaturverzeichnis im Inhaltsverzeichnis nummeriert einfügen.
+	idxtotoc%             Index ins Inhaltsverzeichnis einfügen.
+]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}   % deutsche Silbentrennung
+\selectlanguage{german}   % damit Table Of Contents Inhaltsverzeichnis genannt wird
+
+\usepackage{geometry}   % Seitenränder einstellbar
+\usepackage{textcomp}   % Sonderzeichen, wie Eurosymbol
+
+
+
+% Bilder, Farben, farbige Tabellen
+% --------------------------------
+\usepackage{graphicx, color, colortbl}
+\usepackage{array}       % Erweiterte Tabelleneigenschaften.
+%\usepackage{floatflt}   % Bild kann von Text umflossen werden.
+
+
+
+% Palatino Schrift
+% ----------------
+%\usepackage[T1]{fontenc}
+%\usepackage[osf]{mathpazo}   % osf aktiviert Mediävalziffern/Minuskelziffern
+
+
+
+% Sonstige Pakete
+% ---------------
+%\usepackage{anysize}   % Seitenränder verändern
+%\usepackage{setspace}   % 1.5em Zeilenabstand \begin{onehalfspacing}
+\usepackage{bibgerm}   % Anzeigestil des Literaturverzeichnis (gerabbrv)
+\usepackage{listings}  \lstset{numbers=left, numberstyle=\tiny, numbersep=20pt} % Programmcode einfügen
+
+
+% PDF Eigenschaften
+% -----------------
+\usepackage
+[
+	colorlinks=false,
+	bookmarks = true,
+	pdftitle={Praxissemester Bericht},
+	pdfauthor={Sven Hodapp},
+	pdfsubject={PSS},
+	pdfkeywords={praxissemester, fraunhofer, htwg},
+	urlcolor=blue,
+	pdfstartview=FitH
+]{hyperref}
+
+
+
+
+
+% --------------------
+% 2. Dokumenten Anfang
+% --------------------
+
+\begin{document}
+
+
+
+% Deckblatt
+% ---------
+\include{chapters/titlepage}
+
+
+
+% Inhaltsverzeichnis anzeigen
+% ---------------------------
+\tableofcontents
+\listoffigures
+%\listoftables
+
+
+
+
+% ---------
+% 3. Inhalt
+% ---------
+
+\include{chapters/vorwort}
+
+\addcontentsline{toc}{section}{Literaturverzeichnis}
+\bibliographystyle{gerabbrv}
+\bibliography{bib/references}
+
+\end{document}
+
+
