@@ -1,0 +1,145 @@
+\section{Interpretierte Sprachen und Realzeit}
+
+
+\subsection{Definitionen}
+
+
+Interpretierte Sprachen sind Programmiersprachen, deren Quellcode zur Laufzeit
+durch einen Interpreter eingelesen, analysiert und ausgeführt wird. Dadurch
+ermöglichen sie ein erleichtertes Programmieren, da sie viel Komplexität
+verstecken und einen höheren Abstraktionsgrad ermöglichen -- so müssen zum
+Beispiel Zeiger nicht mehr explizit verwaltet werden, oder Objekte werden von
+einem Garbage Collector automatisch aufgeräumt.
+
+
+Realzeit bedeutet, dass das System innerhalb definierter Zeitspannen zu
+reagieren hat. Das bedeutet also, dass insbesondere die Software innerhalb
+dieser Zeitspanne ihre Berechnungen erledigt haben muss.
+Wenn ein System oder Prozess weiche Realzeitanforderungen hat, kann auch mal
+eine Frist, also die Reaktion war außerhalb der Zeitspanne, verpasst werden.
+Hat ein System allerdings harte Echtzeitanforderungen, so darf es um keinen
+Preis die Frist verpassen, da sonst die Folgen fatal wären. Beispielsweise
+ein Airbag, der erst nach dem Unfall auslöst, wäre unbrauchbar.
+
+
+\subsection{Vorteile von interpretierten Sprachen}
+
+
+Hier sind die Vorteile aufgelistet, die durch interpretierte Sprachen oder
+Skriptingsprachen entstehen und gleichzeitig wird ein Ausblick gegeben, was
+dies für den eingebetteten Kontext bzw. Realzeitbetrieb bedeutet.
+
+
+\begin{itemize}
+
+  \item erleichterte Programmierung
+
+        Was interpretierte Sprachen auszeichnet ist ihre Wendigkeit und die
+        daraus resultierende kürzere Entwicklungszeit der Software. Somit kann
+        Software schneller und einfacher umgebaut werden, aber auch leichter
+        getestet werden. Daher sind interpretierte Sprachen wunderbar für
+        rapide Entwicklung geeignet, weshalb diese Sprachen gerade im Bereich
+        Web sehr verbreitet sind.
+
+        Einer der Gründe ist die dynamische Typisierung, die die meisten
+        interpretierten Sprachen einsetzen: Es muss nicht mehr über alle Typen
+        nachgedacht werden bzw. man fällt nicht mehr so leicht in diverse
+        Fallen, die durch statische Typisierung entstehen. Ebenso ist es
+        jederzeit möglich, die logische Programm-Struktur zu ändern, da diese
+        erst zur Laufzeit zusammengestellt wird; es lassen sich Variablen,
+        Klassen und Funktionen hinzufügen. (Dadurch entsteht aber auch ein
+        gewisser Overhead, wodurch diese Sprachen deutlich langsamer sein
+        können.)
+
+        Es gibt viele komfortable und durch die Sprache vordefinierte (u.U.
+        auch sehr mächtige) Konstrukte, die es ermöglichen eleganten Code zu
+        schreiben, welcher kompakt und ausdrucksstark ist. Die Sprache hat
+        somit ihre eigenen Paradigmen, welche eine hohe Abstraktion bieten.
+        Dank solcher Abstraktionen, muss sich der Programmierer kaum  noch
+        Gedanken über Zeiger und ihre Verwaltung machen, das übernimmt alles
+        der Interpreter bzw. die virtuelle Maschine der Sprache.
+
+        Kein Compilieren, kein Binden, interaktives Debugging.
+
+        Der Programmierer arbeitet also mehr problemorientiert, als an den
+        Problemen mit der Programmiersprache zu kämpfen.
+
+  \item erleichterte Portierbarkeit
+
+        Interpretierte Sprachen lassen sich relativ leicht auf neue
+        Architekturen portieren, denn lediglich der Interpreter muss angepasst
+        werden, der Quellcode der Programme bleibt unberührt.
+
+  \item Garbage Collection
+
+        Die Garbage Collection ist eine der High-Level Abstraktionen die vom
+        Interpreter bzw. der virtuellen Maschine der Programmiersprache
+        angeboten werden. Wenn eine GC angeboten wird, bedeutet das für den
+        Programmierer, dass er sich nicht mehr um die Speicherallokierung und
+        Deallokierung kümmern muss. Das minimiert potentielle Fehlerquellen
+        und erhöht die Entwicklungsgeschwindigkeit → mehr Fokus auf das
+        Problem, welches gelöst werden will.
+
+\end{itemize}
+
+
+\subsection{Nachteile von interpretierten Sprachen}
+
+
+Hier sind die Nachteile aufgelistet, die durch interpretierte Sprachen oder
+Skriptingsprachen entstehen und gleichzeitig wird ein Ausblick gegeben, was
+dies für den eingebetteten Kontext bzw. Realzeitbetrieb bedeutet.
+
+
+\begin{itemize}
+
+  \item Overhead
+
+        Es kann eine langsamere Ausführungszeit bei interpretierten Sprachen
+        entstehen durch das höhere Abstraktionslevel und Vereinfachungen.
+        Der Programmcode muss zur Laufzeit interpretiert bzw. compiliert
+        werden; in regelmäßigen Abständen wird eine Garbage Collection
+        vorgenommen, wodurch der eigentliche Programmablauf unterbrochen oder
+        verlangsamt wird.
+
+        Abgesehen von dem zusätzlichen Rechenaufwand gibt es einen Mehrbedarf
+        an Arbeitsspeicher, zum einen benötigt der Interpreter (bzw. die
+        virtuelle Maschine) zusätzlichen RAM für seinen Programmcode und seine
+        Daten, zum anderen braucht der interpretierte Code ebenfalls mehr
+        Speicher als beispielsweise C-Code.
+
+        Die Ausführung mittels des Interpreters führt zu einer indirekteren
+        Systeminteraktion, die Zugriffe auf das Betriebssystem (“Syscalls”)
+        sind mit Overhead verbunden, da die Schnittstellen abstrahiert sind
+        und der Interpreter die Aufrufe weiterleiten muss.
+
+  \item dynamische Typisierung
+
+        Die dynamische Typisierung kann allerdings auch ein Nachteil sein,
+        da der Typ der Variablen unbekannt ist, was gerade in selten
+        durchlaufenen Programmteilen, die eventuell auch nicht richtig
+        getestet wurden, zu unerwartetem Fehlern führen kann. Die dynamische
+        Typüberprüfung kostet natürlich auch Rechenaufwand zur Laufzeit,
+        zudem fallen Optimierungsmöglichkeiten wie das direkte Einfügen von
+        Maschinencode statt eines Methoden- oder Funktionsaufrufs weg.
+
+\end{itemize}
+
+
+\subsection{Problematiken im Realzeit-Bereich}
+
+
+So lange das System noch nicht an der Auslastungsgrenze ist (CPU-Rechenzeit),
+sollte es kein Problem darstellen, wenn die Software etwas langsamer läuft.
+Es kommt erst dann zu Problemen, wenn harte Echtzeit von Nöten ist, wenn der
+Garbage Collector anspringt und das Programm somit ins Stocken gerät -- zumal
+der GC nicht unbedingt zu deterministischen Zeiten anspringt, und auch nicht
+bekannt ist, wie lange er aktiv ist. Es ist somit sehr schwierig ein
+Wort-Case-Szenario zu erstellen und es müssen Möglichkeiten gesucht werden,
+wie man diese Problematiken in den Griff bekommen kann, so dass auch harte
+Realzeit realisiert werden kann.
+
+
+Für Systeme die nur eine weiche Realzeit erfordern, sollten diese
+Beschränkungen eher weniger das Problem sein. Was z.B. bei diversen 
+“echtzeit” Web-Anwendungen der Fall ist.
