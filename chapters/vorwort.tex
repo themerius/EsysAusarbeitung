@@ -1,3 +1,30 @@
 \section{Vorwort}
-Das Vorwort. \cite{abbr}
 
+Eingebettete Systeme sind immer leistungsfähiger geworden, mittlerweile gibt
+es sehr günstige 32-Bit Mikrocontroller-Architekturen mit relativ hohen
+Taktfrequenzen und dennoch geringem Energieverbrauch. Dadurch ergibt sich die
+Möglichkeit größere Betriebssysteme, wie Linux, einzusetzen um somit weniger
+hardwarenah bzw. abstrakter programmieren zu können. Jedoch ist dies für
+gewöhnlich mit etwas mehr Overhead bzw. erhöhtem Rechenaufwand verbunden,
+aber zugleich eleganter und schneller zu entwickeln.
+\cite{abbr}
+
+Gerade interpretierte Programmiersprachen sind dazu geschaffen, um schnell
+eleganten Programmcode zu schreiben, aber meistens leidet darunter die
+Aus\-führ\-ungs\-gesch\-windig\-keit aufgrund von diversen “High-Level”-Funktionen. In
+dieser Ausarbeitung soll geklärt werden ob solche Programmiersprachen,
+insbesondere die Programmiersprache Python, auch zur Realzeitfähigkeit taugen.
+Dazu werden deren Vor- und Nachteile im Realzeit-Kontext betrachtet und
+spezielle Problematiken aufgezeigt.
+
+
+Python ist eine sehr beliebte Sprache geworden und wird mittlerweile auf
+nahezu jeder Standard-UNIX-Distribution mit ausgeliefert und bietet sehr
+viele flexible Möglichkeiten, sowie eine große Standard-Bibliothek, sowie
+Erweiterbarkeit via C/C++. Aus diesem Grund bietet sich Python als eine
+attraktive Sprache für den eingebetteten Bereich an, weshalb in dieser Arbeit
+Python als näher beleuchtetes Beispiel herangezogen wird. Der zentrale Punkt
+der Diskussion ist die Garbage Collection, und welche Rolle diese gerade für
+harte Echtzeit spielt.
+Interessant sind hier aber auch die verschiedenen Möglichkeiten, Python auf
+einem eingebetten System auszuführen.
