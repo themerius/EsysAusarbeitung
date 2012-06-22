@@ -49,6 +49,26 @@
 
 
 
+% Syntax-Highlighting
+% -------------------
+\definecolor{darkgreen}{rgb}{0,0.5,0}  % needs usepackage color
+\usepackage{listings}
+\lstset{
+	language=Python, 
+	basicstyle=\footnotesize\ttfamily, 
+	frame=lines, 
+	numbers=left, 
+	numberstyle=\tiny, 
+	numbersep=5pt, 
+	breaklines=true, 
+	showstringspaces=false, 
+	keywordstyle=\color{blue}, 
+	commentstyle=\color{darkgreen}, 
+	stringstyle=\color{red}
+}
+
+
+
 % Sonstige Pakete
 % ---------------
 %\usepackage{anysize}   % Seitenränder verändern
@@ -104,6 +124,7 @@
 
 \include{chapters/vorwort}
 \include{chapters/interpretierteSprachen}
+\include{chapters/beispielPython}
 
 \addcontentsline{toc}{section}{Literaturverzeichnis}
 \bibliographystyle{gerabbrv}

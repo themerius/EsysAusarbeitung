@@ -1,0 +1,86 @@
+\section{Beispiel Python}
+
+
+Python, dessen Name sich von der Künstlergruppe Monty Python ableitet, ist um
+1990 von dem Niederländer Guido von Rossum entwickelt worden. In dieser
+Sprache wird auf die klare Sprachsyntax und gute Lesbarkeit sehr großen Wert
+gelegt. Geschaffen wurde die Sprache als Brücke zwischen Shell-Skripten und
+C-Programmen.
+
+Es handelt sich dabei um eine interpretierte, interaktive, Objekt-orientierte
+und funktionale Sprache, die aber auch ein einfaches Skript sein kann. Es gibt
+klar definierte Konzepte, wie Module für Namenräume, dynamische Typesierung
+und simple, zugleich mächtige High-Level-Datenstrukturen wie Listen und
+Verzeichnisse (Dictionaries.) Zudem ist Python sehr leicht via C/C++
+erweiterbar, somit können Wrapper um C-Programme gebaut werden, so dass ein
+erleichterter und komfortabler Zugriff via Python möglich wird. So können bei
+Bedarf Programmzeilen in hart optimierten C-Code ausgelagert werden und Python
+genutzt werden -- gerade im eingebetteten Kontext durchaus ein Vorteil.
+
+Durch die aktive Entwicklergemeinde hat sich eine sehr große und mächtige
+Standard-Bibliothek entwickelt. [pyref → library.pdf] Was nicht zu
+unterschätzen ist, gerade weil dadurch die schon sehr portablen
+Python-Programme, auf diese Basis zurückgreifen können, die ohne Konfiguration
+auf anderen Systemen vornehmen zu müssen.
+
+Aber Python ist auch sehr leicht über externe Bibliotheken erweiterbar.
+Zudem gibt es neben der großen Standard-Bibliothek sehr viele Pakete, die via
+pipy-Index zur Verfügung stehen -- dieser Umfasst zur Zeit 21658 Pakete.
+[Fußnote auf pypi] Das Python-Ecosystem ist sehr umfassend!
+
+
+\subsection{Architektur}
+
+
+\subsubsection{Interpreter}
+
+
+Die Python-Referenzimplementierung CPython ist in der Programmiersprache C
+geschrieben. Ein Python-Skript wird über den CPython-Interpreter ausgeführt;
+der Interpreter stellt alle Funktionalität bereit um das Skript “just in time”
+auszuführen.
+
+Module sind einfache *.py Dateien, die mit dem Schlüsselwort import als
+Namensraum importiert werden können. Es kann dann auf Klassen und Funktionen
+zugegriffen werden, die sich innerhalb der Datei befinden. Pakete sind
+Ordner die eine \_\_init\_\_.py und auch wieder Module enthalten. Die Pakete
+bzw. Module werden vom Interpreter relativ zu seinem Ort wo er von z.B. einer
+Shell aufgerufen wurde aufgespürt. Der Interpreter spürt aber Pakete/Module
+auch über die Umgebungsvariable PYTHONPATH auf oder über fest definierte
+Ordner wo sich systemweite Pakete, wie die Standardbibliothek befinden.
+Der Interpreter unterstützt eine selbständige Speicherverwaltung; eine
+ausführliche Erklärung findet sich in [Kapitel x].
+
+In CPython gibt es den General Interpreter Lock (GIL), welcher die CPython
+Implementierung vereinfacht, indem er nur einen Thread zur gleichen Zeit
+Python-Bytecode ausführen lässt. Threading ist durchaus möglich, um z.B.
+Nicht-Blockierende Programmabschnitte zu ermöglichen -- aber mehrere CPU-Kerne
+bringen der Anwendung nicht mehr Performanz. [pyref → reference.pdf S.81]
+
+
+\subsubsection{Syntax}
+
+
+Um ein Gefühl zu bekommen, wie Python-Code aussieht, ist hier ein Code-Beispiel
+gezeigt, indem die meist verwandten Konstruktionen aufgezeigt werden.
+
+
+\lstinputlisting[language=Python]{code/pycharm.py}
+
+
+Es gibt noch eine Besonderheit bei den Python-Objekten: Dort muss explizit der
+self-Zeiger bei jeder Funktion explizit mit angegeben werden. Was der Python
+Philosophie  “Explicit is better than implicit” [pyzen] entspricht.
+
+
+\subsubsection{Dokumentation}
+
+
+Die Dokumentation in Python erfolgt über so genannte Docstrings. Diese
+Docstrings werden an die Funktions-, Klassenrümpfe bzw. Modulrümpfe gehängt
+(siehe Syntax-Beispiel.) Die Docstrings können während der Laufzeit mit
+`funktionsname.\_\_doc\_\_` ausgelesen werden. Mit dem beliebten
+Dokumentationsgenerator `sphinx` kann aus diesen Docstrings automatisch
+eine Dokumentation generiert werden.
+Beispiele, wie die Funktion benutzt wird, werden gerne als Doctests innerhalb
+der Docstrings angegeben.
