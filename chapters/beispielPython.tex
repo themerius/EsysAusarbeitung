@@ -18,15 +18,16 @@ Bedarf Programmzeilen in hart optimierten C-Code ausgelagert werden und Python
 genutzt werden -- gerade im eingebetteten Kontext durchaus ein Vorteil.
 
 Durch die aktive Entwicklergemeinde hat sich eine sehr große und mächtige
-Standard-Bibliothek entwickelt. [pyref → library.pdf] Was nicht zu
+Standard-Bibliothek entwickelt.\cite{pyref-library} Was nicht zu
 unterschätzen ist, gerade weil dadurch die schon sehr portablen
 Python-Programme, auf diese Basis zurückgreifen können, die ohne Konfiguration
 auf anderen Systemen vornehmen zu müssen.
 
 Aber Python ist auch sehr leicht über externe Bibliotheken erweiterbar.
 Zudem gibt es neben der großen Standard-Bibliothek sehr viele Pakete, die via
-pipy-Index zur Verfügung stehen -- dieser Umfasst zur Zeit 21658 Pakete.
-[Fußnote auf pypi] Das Python-Ecosystem ist sehr umfassend!
+pipy-Index zur Verfügung stehen -- dieser Umfasst zur Zeit 21811
+Pakete\footnote{Quelle: \url{http://pypi.python.org/pypi}, Zugriff am 22.6.12}.
+Das Python-Ecosystem ist sehr umfassend!
 
 
 \subsection{Architektur}
@@ -55,7 +56,7 @@ In CPython gibt es den General Interpreter Lock (GIL), welcher die CPython
 Implementierung vereinfacht, indem er nur einen Thread zur gleichen Zeit
 Python-Bytecode ausführen lässt. Threading ist durchaus möglich, um z.B.
 Nicht-Blockierende Programmabschnitte zu ermöglichen -- aber mehrere CPU-Kerne
-bringen der Anwendung nicht mehr Performanz. [pyref → reference.pdf S.81]
+bringen der Anwendung nicht mehr Performanz.\cite{pyref-reference}
 
 
 \subsubsection{Syntax}
@@ -70,7 +71,7 @@ gezeigt, indem die meist verwandten Konstruktionen aufgezeigt werden.
 
 Es gibt noch eine Besonderheit bei den Python-Objekten: Dort muss explizit der
 self-Zeiger bei jeder Funktion explizit mit angegeben werden. Was der Python
-Philosophie  “Explicit is better than implicit” [pyzen] entspricht.
+Philosophie  “Explicit is better than implicit”\footnote{Quelle: \url{http://www.python.org/dev/peps/pep-0020/}} entspricht.
 
 
 \subsubsection{Dokumentation}
@@ -94,15 +95,14 @@ automatisch freigibt, so dass sich der Programmierer nicht mehr explizit
 darum kümmern muss. Python macht intern in der unteren C-Ebene starken
 Gebrauch von mallock() und free(), daher braucht Python eine Strategie, um
 Speicherlecks zu vermeiden und verwendet dazu (a) Referenzzählen und (b)
-optional einen GC der Referenzzyklen aufspüren und brechen kann.
-[pyref → S.81 reference.pdf]
+optional einen GC der Referenzzyklen aufspüren und brechen kann. (\cite{pyref-reference}, Seite 81)
 
 Ergänzung: Typen die keine Referenzen auf andere Objekte halten, oder
 lediglich Referenzen auf atomare Typen haben, müssen keine explizite GC
-unterstützen. [pyref → S138 c-api.pdf]
+unterstützen. (\cite{pyref-c-api}, S. 138)
 
 Python unterscheidet zwischen (a) Referenzzählen und (b) der automatischen
-optionalen GC [pyref → S13 extending.pdf]:
+optionalen GC (\cite{pyref-extending}, S. 13):
 
 
 \begin{enumerate}[(a)]
@@ -150,19 +150,19 @@ Verhalten (durch die verzögerte Erkennung der Zyklen, die irgendwann
 auftreten kann), was gerade für harte Echtzeitbedingungen zu schwer zu
 prognostizierender Worst-Case-Analyse führt. Wenn man den GC deaktiviert,
 muss jedoch darauf geachtet werden, dass keine Referenz-Zyklen auftreten,
-was ein potentielles Speicherleck hervorrufen kann. [pyref → S1084 library.pdf]
+was ein potentielles Speicherleck hervorrufen kann. (\cite{pyref-library}, S. 1084)
 
 Das Referenzzählen kann in eine Worst-Case-Analyse besser aufgenommen werden,
 da sich das Problem ebenfalls auf der C-Ebene abspielen würde -- und es gibt
 durchaus realzeitfähige Dynamic Storage Allocator Algorithmen, die wiederum
 mehr vom Betriebssystem bzw. den verwendeten C-Bibliotheken abhängen. Dieses
-Verhalten sollte und kann auch in die Worst-Case-Berechnungen mit einfließen. [malloc]
+Verhalten sollte und kann auch in die Worst-Case-Berechnungen mit einfließen.\cite{malloc}
 
 Referenzzählen ist also durchaus für den harten Echtzeiteinsatz geeignet.
 Zumal eine Art von GC auch auf eingebetteten Systemen nicht verkehrt ist, da
 dort Speicherlecks desaströs sind in Anbetracht der geringen
 Speicherressourcen bzw. der einfachen oder nicht vorhandenen
-Speicherverwaltung des eingebetteten Betriebssystems. [refcount]
+Speicherverwaltung des eingebetteten Betriebssystems.\cite{refcount}
 
 Wenn beim Programmstart lediglich statischer Speicher alloziert wird, so
 sollte die GC sowieso eine recht untergeordnete Rolle spielen.
@@ -184,7 +184,7 @@ Projekte die versuchen den Kernel auch fit für harte Realzeit im eingebetteten
 Kontext zu machen. Beispiele hierfür sind RTLinux, µClinux oder avr32linux.
 Realtime Linux ist eine Abzweigung des Standardkernel, welcher eine
 verbesserte Unterbrechbarkeit und hochauflösende Timer bietet; es fließen hin
-und wieder diese Modifikationen auch in den Standardkernel ein. [dipl S.5]
+und wieder diese Modifikationen auch in den Standardkernel ein. (\cite{dipl}, S. 5)
 
 Im folgenden werden verschiedene Python Implementierungen für (embedded) Linux
 vorgestellt:
@@ -200,11 +200,11 @@ vorgestellt:
         CPython muss gegen die glibc oder uClibc gebaut werden. Selbst wenn
         viele nicht benötigte Pakete aus der Standardbibliothek entfernt
         werden, benötigt der Interpreter noch immer mindestens 725 KB.
-        [embeddedlinux Kap. 4.6]
+        (\cite{embeddedlinux}, Kap. 4.6)
 
   \item tinypy
 
-        Ist eine minimalistische Python-Implementierung, die nur 64 KB braucht. [tinypy]
+        Ist eine minimalistische Python-Implementierung, die nur 64 KB braucht.\cite{tinypy}
   \item IronPython
 
         IronPython ist eine open-source Implementierung von Python für das
@@ -219,7 +219,7 @@ vorgestellt:
         Debug-Server auf dem eingebetteten System notwendig ist, und bietet so
         eine Übersicht der Threads inklusive Stacktraces und Inhalten der
         Variablen, zudem lassen sich Breakpoints festlegen und die Anweisungen
-        können schrittweise durchsprungen werden ([ironpython], Kap. 3).
+        können schrittweise durchsprungen werden (\cite{ironpython}, Kap. 3).
 
         Der von IronPython generierte CIL-Bytecode kann als .NET-Assembly
         gespeichert werden, was ein erneutes Ausführen durch die Virtual
@@ -228,7 +228,7 @@ vorgestellt:
 \end{itemize}
 
 
-Im Zuge der Diplomarbeit von Volker Thoms [dipl] sind eine Reihe von
+Im Zuge der Diplomarbeit von Volker Thoms \cite{dipl} sind eine Reihe von
 Python-Modulen für den komfortablen Gerätezugriff in Verbindung mit einem
 embedded Linux entstanden bzw. in Zusammenhang gebracht. Es handelt sich dabei
 um Wrapper für die Unix-Geräte-Dateien (/dev/*):
@@ -241,7 +241,7 @@ um Wrapper für die Unix-Geräte-Dateien (/dev/*):
   \item py-smbus: Wrapper um /dev/i2c-x
   \item py-spi: Wrapper um /dev/spidevX.Y. (X=bus, Y=client)
   \item py-pwm: Generische Pulsweiten Modulations API, die den Hardwarekanal ansprechen kann
-  \item py-softpwm: Software PWM als Kernelmodul, Wrapper um /dev/softpwm [dipl]
+  \item py-softpwm: Software PWM als Kernelmodul, Wrapper um /dev/softpwm \cite{dipl}
 
 \end{itemize}
 
@@ -250,7 +250,7 @@ PyET ist eine Sammlung von Programmen, Modulen und Skripten, welche die
 Entwicklung von eingebetteten Systemen mit Python vereinfacht. Es existieren
 beispielsweise Pakete für “Background Debug Mode for Motorola processors”
 (PyBDM) und “Boundary Scan for IEEE-1149.1 (JTAG) devices” (PyBSC), welche
-von dem PyET-Projekt entwickelt wurden. [pyet]
+von dem PyET-Projekt entwickelt wurden.\cite{pyet}
 
 
 \subsubsection{python-on-a-chip}
@@ -272,9 +272,10 @@ Der Entwickler muss also auf die Treiber, Bibliotheken und Tools setzen, die
 das python-on-a-chip-Projekt liefert.
 
 Die VM kann mehrere Threads mit dem Round-Robin Scheduling-Verfahren laufen
-lassen. Als GC-Methode kommt ein Mark-and-Sweep-Algorithmus zum Einsatz. [p14]
+lassen. Als GC-Methode kommt ein Mark-and-Sweep-Algorithmus zum Einsatz. \cite{p14p}
+
 Die Worst-Case-Ausführungszeit von Mark-and-Sweep entspricht der quadrierten
-dynamischen Speichergröße (Heap). [sweep] Und sobald eine vernünftige
+dynamischen Speichergröße (Heap).\cite{sweep} Und sobald eine vernünftige
 Worst-Case-Analyse möglich ist, kann auch harter Realzeit genüge getan werden
 -- wenn auch die Analyse mit etwas mehr Aufwand verbunden ist als mit
 manueller Speicherverwaltung.
