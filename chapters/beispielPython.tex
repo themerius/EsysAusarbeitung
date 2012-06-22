@@ -84,3 +84,197 @@ Dokumentationsgenerator `sphinx` kann aus diesen Docstrings automatisch
 eine Dokumentation generiert werden.
 Beispiele, wie die Funktion benutzt wird, werden gerne als Doctests innerhalb
 der Docstrings angegeben.
+
+
+\subsection{Garbage Collection}
+
+
+Garbage Collection (GC) ist ein Prozess, der nicht mehr benötigter Speicher
+automatisch freigibt, so dass sich der Programmierer nicht mehr explizit
+darum kümmern muss. Python macht intern in der unteren C-Ebene starken
+Gebrauch von mallock() und free(), daher braucht Python eine Strategie, um
+Speicherlecks zu vermeiden und verwendet dazu (a) Referenzzählen und (b)
+optional einen GC der Referenzzyklen aufspüren und brechen kann.
+[pyref → S.81 reference.pdf]
+
+Ergänzung: Typen die keine Referenzen auf andere Objekte halten, oder
+lediglich Referenzen auf atomare Typen haben, müssen keine explizite GC
+unterstützen. [pyref → S138 c-api.pdf]
+
+Python unterscheidet zwischen (a) Referenzzählen und (b) der automatischen
+optionalen GC [pyref → S13 extending.pdf]:
+
+
+\begin{enumerate}[(a)]
+
+  \item Referenzzählen
+
+        Jedes Python-Objekt hält eine Variable, worin die Anzahl der
+        Referenzen gezählt wird, die von anderen Objekten in Besitz sind.
+        Wenn eine Referenz auf ein Objekt in Besitz genommen werden will,
+        muss es die Py\_INCREF-Methode (Variable hochzählen) des Objekts
+        aufrufen werden. Wenn der Besitzer die Referenz verwerfen will, so
+        wird Py\_DECREF (Variable runterzählen) aufgerufen. Sobald die
+        Zählvariable bei Null angekommen ist, wird das Objekt zerstört.
+        Dieses Verhalten ist in der untersten Ebene bzw. C-Ebene der Sprache
+        verdrahtet -- zumindest gilt das für die offizielle
+        CPython-Referenzimplementierung.
+
+        Es gibt auch die Möglichkeit, dass Referenzen ausgeliehen werden
+        können. Wenn das der Fall ist, wird kein Py\_DECREF vom Leihenden
+        aufgerufen (die Referenz kann vom Leihenden also nicht zerstört
+        werden.) Vorteil: Der Leihende muss nicht die Verantwortung über die
+        Zerstörung der Referenz tragen; Nachteil: Der Leihende läuft Gefahr
+        schon freigeräumten Speicher zu verwenden.
+
+  \item Automatische GC
+
+        Das was unter Python als automatischer GC gilt, ist optional und
+        kann zur Lauftzeit deaktiviert werden. Dazu gibt es ein Interface,
+        welches über das `gc`-Modul bereitgestellt wird, wo noch mehr
+        Parameter eingestellt werden können, um das GC-Verhalten
+        feinabzustimmen.
+
+        Die automatische GC bietet eine verzögerte Erkennung von zyklisch
+        zusammenhängenden Garbage-Objekten, eben diese die nicht via
+        Referenzzählen aufgespürt werden können; z.B. wenn ein Objekt auf
+        sich selbst eine Referenz hält.
+
+        Die automatische GC ist also nur eine Ergänzung zum Referenzzählen.
+
+\end{enumerate}
+
+
+Der automatische, aber optionale, GC sorgt für ein nicht-deterministisches
+Verhalten (durch die verzögerte Erkennung der Zyklen, die irgendwann
+auftreten kann), was gerade für harte Echtzeitbedingungen zu schwer zu
+prognostizierender Worst-Case-Analyse führt. Wenn man den GC deaktiviert,
+muss jedoch darauf geachtet werden, dass keine Referenz-Zyklen auftreten,
+was ein potentielles Speicherleck hervorrufen kann. [pyref → S1084 library.pdf]
+
+Das Referenzzählen kann in eine Worst-Case-Analyse besser aufgenommen werden,
+da sich das Problem ebenfalls auf der C-Ebene abspielen würde -- und es gibt
+durchaus realzeitfähige Dynamic Storage Allocator Algorithmen, die wiederum
+mehr vom Betriebssystem bzw. den verwendeten C-Bibliotheken abhängen. Dieses
+Verhalten sollte und kann auch in die Worst-Case-Berechnungen mit einfließen. [malloc]
+
+Referenzzählen ist also durchaus für den harten Echtzeiteinsatz geeignet.
+Zumal eine Art von GC auch auf eingebetteten Systemen nicht verkehrt ist, da
+dort Speicherlecks desaströs sind in Anbetracht der geringen
+Speicherressourcen bzw. der einfachen oder nicht vorhandenen
+Speicherverwaltung des eingebetteten Betriebssystems. [refcount]
+
+Wenn beim Programmstart lediglich statischer Speicher alloziert wird, so
+sollte die GC sowieso eine recht untergeordnete Rolle spielen.
+
+
+\subsection{Setup-Szenarien}
+
+
+\subsubsection{Embedded Linux}
+
+
+Linux ist ein weit verbreiteter Open-Source Betriebssystem-Kernel. Der Kernel
+ist sehr flexibel in der Konfiguration, soll heißen, er kann vom Supercomputer
+bis zum kleinen eingebetteten System verwendet werden. Mindestens wird jedoch
+ein 32-Bit Prozessor vorausgesetzt.
+
+Der Standardkernel kann lediglich weiche Realzeit garantieren, aber es gibt
+Projekte die versuchen den Kernel auch fit für harte Realzeit im eingebetteten
+Kontext zu machen. Beispiele hierfür sind RTLinux, µClinux oder avr32linux.
+Realtime Linux ist eine Abzweigung des Standardkernel, welcher eine
+verbesserte Unterbrechbarkeit und hochauflösende Timer bietet; es fließen hin
+und wieder diese Modifikationen auch in den Standardkernel ein. [dipl S.5]
+
+Im folgenden werden verschiedene Python Implementierungen für (embedded) Linux
+vorgestellt:
+
+
+\begin{itemize}
+
+  \item CPython
+
+        Auf die Implementierung von CPython sind wir schon im Kapitel
+        (Architektur, GC) ausführlich eingegangen.
+
+        CPython muss gegen die glibc oder uClibc gebaut werden. Selbst wenn
+        viele nicht benötigte Pakete aus der Standardbibliothek entfernt
+        werden, benötigt der Interpreter noch immer mindestens 725 KB.
+        [embeddedlinux Kap. 4.6]
+
+  \item tinypy
+
+        Ist eine minimalistische Python-Implementierung, die nur 64 KB braucht. [tinypy]
+  \item IronPython
+
+        IronPython ist eine open-source Implementierung von Python für das
+        .NET Framework. Die in C\# geschriebene Umgebung kann sowohl .NET-
+        als auch Python-Bibliotheken verwenden und macht es den
+        .NET-Programmiersprachen auf einfache Weise möglich Python-Code
+        auszuführen.
+
+        IronPython lässt sich auf einem (embedded) Linux mittels der Mono
+        Virtual Machine ausführen und bietet gute Möglichkeiten zum Debuggen.
+        Der Mono Debugger unterstützt Remote-Debugging, wofür nur ein kleiner
+        Debug-Server auf dem eingebetteten System notwendig ist, und bietet so
+        eine Übersicht der Threads inklusive Stacktraces und Inhalten der
+        Variablen, zudem lassen sich Breakpoints festlegen und die Anweisungen
+        können schrittweise durchsprungen werden ([ironpython], Kap. 3).
+
+        Der von IronPython generierte CIL-Bytecode kann als .NET-Assembly
+        gespeichert werden, was ein erneutes Ausführen durch die Virtual
+        Machine um einiges beschleunigt.
+
+\end{itemize}
+
+
+Im Zuge der Diplomarbeit von Volker Thoms [dipl] sind eine Reihe von
+Python-Modulen für den komfortablen Gerätezugriff in Verbindung mit einem
+embedded Linux entstanden bzw. in Zusammenhang gebracht. Es handelt sich dabei
+um Wrapper für die Unix-Geräte-Dateien (/dev/*):
+
+
+\begin{itemize}
+
+  \item socket: Teil der Standardbibliothek
+  \item pyserial: Für serielle Schnittstellen, ein Wrapper um termios.
+  \item py-smbus: Wrapper um /dev/i2c-x
+  \item py-spi: Wrapper um /dev/spidevX.Y. (X=bus, Y=client)
+  \item py-pwm: Generische Pulsweiten Modulations API, die den Hardwarekanal ansprechen kann
+  \item py-softpwm: Software PWM als Kernelmodul, Wrapper um /dev/softpwm [dipl]
+
+\end{itemize}
+
+
+PyET ist eine Sammlung von Programmen, Modulen und Skripten, welche die
+Entwicklung von eingebetteten Systemen mit Python vereinfacht. Es existieren
+beispielsweise Pakete für “Background Debug Mode for Motorola processors”
+(PyBDM) und “Boundary Scan for IEEE-1149.1 (JTAG) devices” (PyBSC), welche
+von dem PyET-Projekt entwickelt wurden. [pyet]
+
+
+\subsubsection{python-on-a-chip}
+
+
+Einen sehr spannenden und gänzlich anderen Ansatz verfolgt das
+python-on-a-chip-Projekt. Das Projekt entwickelt eine reduzierte Python
+virtuelle Maschine, die PyMite VM, zugeschnitten auf 8-Bit und größere
+Mikrocontroller. Es kommt gänzlich ohne Betriebssystem aus und kann somit
+direkt auf dem Mikrocontroller arbeiten, mit gleichzeitig geringem
+Resourcenverbrauch von ca. 64 KB Flash-Speicher und mindestens
+4 KB Arbeitsspeicher.
+
+Jedoch gilt zu beachten, dass es sich hierbei um ein reduziertes Python
+handelt und somit nicht alle Python-Tricks umgesetzt werden können. Es kann
+somit auch nicht auf die normale Python-Standard-Bibliothek gesetzt werden
+bzw. andere normale Bibliotheken, die das vollständige Python voraussetzen.
+Der Entwickler muss also auf die Treiber, Bibliotheken und Tools setzen, die
+das python-on-a-chip-Projekt liefert.
+
+Die VM kann mehrere Threads mit dem Round-Robin Scheduling-Verfahren laufen
+lassen. Als GC-Methode kommt ein Mark-and-Sweep-Algorithmus zum Einsatz. [p14]
+Die Worst-Case-Ausführungszeit von Mark-and-Sweep entspricht der quadrierten
+dynamischen Speichergröße (Heap). [sweep] Und sobald eine vernünftige
+Worst-Case-Analyse möglich ist, kann auch harter Realzeit genüge getan werden
+-- wenn auch die Analyse mit etwas mehr Aufwand verbunden ist als mit
+manueller Speicherverwaltung.
