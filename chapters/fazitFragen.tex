@@ -10,12 +10,12 @@ Im Konkreten Beispiel Python sind die Implementeriungsdetails der Sprache zur
 Sprache gekommen, insbesondere die Details der Referenzimplementierung CPython
 und ob es möglich ist, diese Sprache harten Realzeitanforderungen auszusetzen,
 ohne all zu viel von der agilen und komfortablen Entwicklung zu verlieren.
-Das hängt von zwei Faktoren ab: (1) dem eingesetzen Betriebssystem und (2) ob
+Das hängt jedoch von zwei Faktoren ab: (1) dem eingesetzen Betriebssystem und (2) ob
 eine vernünftige Worst-Case-Analyse der Spracheigenschaften bzw.
 Sprachimplementierung, aber insbesondere des eingesetzten Garbage Collection
 Verfahrens, möglich ist. Es konnte gezeigt werden, dass es durchaus Garbage Collection
 Verfahren, wie das Referenzzählen, gibt, die auch für harte Echtzeit geeigenet
-sind und CPython setzt dieses Verfahren ein. Wenn ein embedded Linux als
+sein können und CPython setzt ein solches Verfahren ein. Wenn ein embedded Linux als
 Betriebssystem eingesetzt wird, muss jedoch etwas Aufwand getrieben werden,
 dieses für harte Echtzeit zu rüsten.
 

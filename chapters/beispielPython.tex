@@ -156,10 +156,17 @@ Das Referenzzählen kann in eine Worst-Case-Analyse besser aufgenommen werden,
 da sich das Problem ebenfalls auf der C-Ebene abspielen würde -- und es gibt
 durchaus realzeitfähige Dynamic Storage Allocator Algorithmen, die wiederum
 mehr vom Betriebssystem bzw. den verwendeten C-Bibliotheken abhängen. Dieses
-Verhalten sollte und kann auch in die Worst-Case-Berechnungen mit einfließen. \cite{malloc}
+Verhalten sollte in die Worst-Case-Berechnungen mit einfließen. \cite{malloc}
 
-Referenzzählen ist also durchaus für den harten Echtzeiteinsatz geeignet.
-Zumal eine Art von GC auch auf eingebetteten Systemen nicht verkehrt ist, da
+Es gibt durchaus Referenzzählen-Verfahren, wie das \emph{RT-Reference
+Counting} \cite{refcount}, die durchaus für den harten Realzeiteinsatz
+geeignet sind.
+Auch wenn das von CPython eingesetzte Verfahren eher dem \emph{Standard
+Reference Counting} entspricht, ist es eher duch eine Worst-Case-Analyse
+erfassbar als andere nicht-deterministische Verfahren,
+wenngleich die Bestimmung sich sicherlich schwieriger gestaltet.
+
+Jedoch ist eine Art von GC auch auf eingebetteten Systemen nicht verkehrt, da
 dort Speicherlecks desaströs sind in Anbetracht der geringen
 Speicherressourcen bzw. der einfachen oder nicht vorhandenen
 Speicherverwaltung des eingebetteten Betriebssystems.\cite{refcount}
