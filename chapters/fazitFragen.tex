@@ -38,6 +38,24 @@ die für weiche Realzeitanforderungen mehr als genügt, sofern genug
 Hardware\-ressourcen zur Verfügung stehen.
 
 
+\newpage
 \section{Fragen}
 
-TODO
+
+\begin{enumerate}
+
+  \item Was ist ein Hauptvorteil und ein Hauptnachteil von interpretierten Sprachen?
+
+        Vorteil: agile Entwicklung, Nachteil: relativ viel Overhead
+
+  \item Ein Vor- aber auch Nachteil ist die Garbage Collection. Warum kann GC zu einem Nachteil werden (bei harten Realzeitanforderungen)?
+
+        Je nach eingeseten Algorithmus: Gänzlich nicht-deterministisches
+        Verhalten oder es ist schwieriger eine Worst-Case-Analyse zu erstellen.
+
+  \item Was zeichnet Python besonders für den eingebetteten Einsatz aus?
+
+        Da es als Brücke zwsichen Shell-Skripten und C-Programmen konzipiert
+        ist, ist es relativ leicht, wenn nötig, via C/C++ zu erweitern.
+
+\end{enumerate}
