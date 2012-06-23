@@ -14,23 +14,23 @@ und simple, zugleich mächtige High-Level-Datenstrukturen wie Listen und
 Verzeichnisse (Dictionaries.) Zudem ist Python sehr leicht via C/C++
 erweiterbar, somit können Wrapper um C-Programme gebaut werden, so dass ein
 erleichterter und komfortabler Zugriff via Python möglich wird. So können bei
-Bedarf Programmzeilen in hart optimierten C-Code ausgelagert werden und Python
-genutzt werden -- gerade im eingebetteten Kontext durchaus ein Vorteil.
+Bedarf rechen\-inten\-sive Programmzeilen in hart optimierten C-Code ausgelagert
+werden und trotzdem Python zur Programmsteuerung genutzt werden -- gerade im
+eingebetteten Kontext durchaus ein Vorteil.
 
 Durch die aktive Entwicklergemeinde hat sich eine sehr große und mächtige
 Standard-Bibliothek entwickelt.\cite{pyref-library} Was nicht zu
 unterschätzen ist, gerade weil dadurch die schon sehr portablen
-Python-Programme, auf diese Basis zurückgreifen können, die ohne Konfiguration
-auf anderen Systemen vornehmen zu müssen.
+Python-Programme auf diese Basis zurückgreifen können.
 
 Aber Python ist auch sehr leicht über externe Bibliotheken erweiterbar.
 Zudem gibt es neben der großen Standard-Bibliothek sehr viele Pakete, die via
-pipy-Index zur Verfügung stehen -- dieser Umfasst zur Zeit 21811
+pipy-Index zur Verfügung stehen -- dieser umfasst zur Zeit 21811
 Pakete\footnote{Quelle: \url{http://pypi.python.org/pypi}, Zugriff am 22.6.12}.
 Das Python-Ecosystem ist sehr umfassend!
 
 
-\subsection{Architektur}
+\subsection{Architektur}\label{sec:python_arch}
 
 
 \subsubsection{Interpreter}
@@ -45,12 +45,12 @@ Module sind einfache *.py Dateien, die mit dem Schlüsselwort import als
 Namensraum importiert werden können. Es kann dann auf Klassen und Funktionen
 zugegriffen werden, die sich innerhalb der Datei befinden. Pakete sind
 Ordner die eine \_\_init\_\_.py und auch wieder Module enthalten. Die Pakete
-bzw. Module werden vom Interpreter relativ zu seinem Ort wo er von z.B. einer
-Shell aufgerufen wurde aufgespürt. Der Interpreter spürt aber Pakete/Module
+bzw. Module werden vom Interpreter relativ zu seinem Ort, wo er von z.B. einer
+Shell aufgerufen wurde, aufgespürt. Der Interpreter spürt aber Pakete/Module
 auch über die Umgebungsvariable PYTHONPATH auf oder über fest definierte
-Ordner wo sich systemweite Pakete, wie die Standardbibliothek befinden.
+Ordner, wo sich systemweite Pakete, wie die Standardbibliothek befinden.
 Der Interpreter unterstützt eine selbständige Speicherverwaltung; eine
-ausführliche Erklärung findet sich in [Kapitel x].
+ausführliche Erklärung findet sich in \ref{sec:python_gc}.
 
 In CPython gibt es den General Interpreter Lock (GIL), welcher die CPython
 Implementierung vereinfacht, indem er nur einen Thread zur gleichen Zeit
@@ -78,7 +78,7 @@ Philosophie  “Explicit is better than implicit”\footnote{Quelle: \url{http:/
 
 
 Die Dokumentation in Python erfolgt über so genannte Docstrings. Diese
-Docstrings werden an die Funktions-, Klassenrümpfe bzw. Modulrümpfe gehängt
+Docstrings werden an die Funktions-, Klassen- bzw. Modulrümpfe gehängt
 (siehe Syntax-Beispiel.) Die Docstrings können während der Laufzeit mit
 `funktionsname.\_\_doc\_\_` ausgelesen werden. Mit dem beliebten
 Dokumentationsgenerator `sphinx` kann aus diesen Docstrings automatisch
@@ -87,7 +87,7 @@ Beispiele, wie die Funktion benutzt wird, werden gerne als Doctests innerhalb
 der Docstrings angegeben.
 
 
-\subsection{Garbage Collection}
+\subsection{Garbage Collection}\label{sec:python_gc}
 
 
 Garbage Collection (GC) ist ein Prozess, der nicht mehr benötigter Speicher
@@ -156,7 +156,7 @@ Das Referenzzählen kann in eine Worst-Case-Analyse besser aufgenommen werden,
 da sich das Problem ebenfalls auf der C-Ebene abspielen würde -- und es gibt
 durchaus realzeitfähige Dynamic Storage Allocator Algorithmen, die wiederum
 mehr vom Betriebssystem bzw. den verwendeten C-Bibliotheken abhängen. Dieses
-Verhalten sollte und kann auch in die Worst-Case-Berechnungen mit einfließen.\cite{malloc}
+Verhalten sollte und kann auch in die Worst-Case-Berechnungen mit einfließen. \cite{malloc}
 
 Referenzzählen ist also durchaus für den harten Echtzeiteinsatz geeignet.
 Zumal eine Art von GC auch auf eingebetteten Systemen nicht verkehrt ist, da
@@ -194,8 +194,8 @@ vorgestellt:
 
   \item CPython
 
-        Auf die Implementierung von CPython sind wir schon im Kapitel
-        (Architektur, GC) ausführlich eingegangen.
+        Auf die Implementierung von CPython sind wir schon in den Kapiteln
+        \ref{sec:python_arch} und \ref{sec:python_gc} ausführlich eingegangen.
 
         CPython muss gegen die glibc oder uClibc gebaut werden. Selbst wenn
         viele nicht benötigte Pakete aus der Standardbibliothek entfernt
@@ -230,7 +230,7 @@ vorgestellt:
 
 Im Zuge der Diplomarbeit von Volker Thoms \cite{dipl} sind eine Reihe von
 Python-Modulen für den komfortablen Gerätezugriff in Verbindung mit einem
-embedded Linux entstanden bzw. in Zusammenhang gebracht. Es handelt sich dabei
+embedded Linux entstanden bzw. in Zusammenhang gebracht worden. Es handelt sich dabei
 um Wrapper für die Unix-Geräte-Dateien (/dev/*):
 
 

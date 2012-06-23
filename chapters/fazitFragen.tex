@@ -3,17 +3,17 @@
 
 Zunächst wurde ein Überblick verschafft, was interpretierte Sprachen
 “Skriptsprachen” ausmacht. Der große Vorteil sind die agile Entwicklung und
-Nachteil ist die Performanz bzw. das Nicht-deterministische Verhalten, welches
+Nachteil ist die Performanz bzw. das nicht-deterministische Verhalten, welches
 gerade durch den Gargabe Collector ausgelöst wird.
 
 Im Konkreten Beispiel Python sind die Implementeriungsdetails der Sprache zur
 Sprache gekommen, insbesondere die Details der Referenzimplementierung CPython
-und ob es möglich ist diese Sprache harten Realzeitanforderungen auszusetzen,
+und ob es möglich ist, diese Sprache harten Realzeitanforderungen auszusetzen,
 ohne all zu viel von der agilen und komfortablen Entwicklung zu verlieren.
 Das hängt von zwei Faktoren ab: (1) dem eingesetzen Betriebssystem und (2) ob
 eine vernünftige Worst-Case-Analyse der Spracheigenschaften bzw.
 Sprachimplementierung, aber insbesondere des eingesetzten Garbage Collection
-Verfahrens. Es konnte gezeigt werden, dass es durchaus Garbage Collection
+Verfahrens, möglich ist. Es konnte gezeigt werden, dass es durchaus Garbage Collection
 Verfahren, wie das Referenzzählen, gibt, die auch für harte Echtzeit geeigenet
 sind und CPython setzt dieses Verfahren ein. Wenn ein embedded Linux als
 Betriebssystem eingesetzt wird, muss jedoch etwas Aufwand getrieben werden,
@@ -31,11 +31,11 @@ Worst-Case-analysierbar und somit kann harte Realzeit garantiert werden.
 
 Was aber bei allen Skriptingsprachen gilt ist, dass die Worst-Case-Analyse
 zur Bestimmung der harten Realzeitanforderungen komplexer ist und einige
-mehr Fallen existieren.
+Fallen mehr existieren.
 
-Jedoch Fakt ist, dass eine einfachere und schnellere Entwicklung möglich ist,
+Jedoch ist Fakt, dass eine einfachere und schnellere Entwicklung möglich ist,
 die für weiche Realzeitanforderungen mehr als genügt, sofern genug
-Hardwareressourcen zur Verfügung stehen.
+Hardware\-ressourcen zur Verfügung stehen.
 
 
 \section{Fragen}
